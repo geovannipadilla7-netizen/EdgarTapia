@@ -25,8 +25,8 @@ const ICONS = {
 
 function resolveAssetPath(assetPath, catalogBase) {
   if (!assetPath) return '';
-  if (/^(https?:)?\/\//.test(assetPath)) return assetPath;
-  const clean = assetPath.replace(/^\.\//, '').replace(/^\//, '');
+  if (/^(https?:)?\/\//.test(assetPath) || assetPath.startsWith('/')) return assetPath;
+  const clean = assetPath.replace(/^\.\//, '');
   return `${catalogBase}${clean}`;
 }
 
@@ -35,13 +35,17 @@ function parseIframeMarkup(htmlString, fallbackTitle, catalogBase) {
   const doc = new DOMParser().parseFromString(htmlString, 'text/html');
   const el = doc.querySelector('iframe');
   if (!el) return null;
-  const rawSrc = el.getAttribute('src');
+  const rawSrc = el.getAttribute('src') || el.getAttribute('data-src');
   if (!rawSrc) return null;
   return {
+    id: el.getAttribute('id') || '',
     src: resolveAssetPath(rawSrc, catalogBase),
+    dataSrc: el.getAttribute('data-src') || '',
     title: el.getAttribute('title') || fallbackTitle,
     allow: el.getAttribute('allow') || '',
     sandbox: el.getAttribute('sandbox') || '',
+    allowFullscreen: el.hasAttribute('allowfullscreen'),
+    extraClass: el.getAttribute('class') || '',
   };
 }
 
@@ -52,7 +56,17 @@ function createEl(tag, className, text) {
   return el;
 }
 
+function createFallbackThumb(title) {
+  const fallback = createEl('div', 'thumb-fallback');
+  fallback.innerHTML = ICONS.gamepad;
+  fallback.appendChild(createEl('span', '', title));
+  return fallback;
+}
+
 function createThumbImg(src, title) {
+  if (!src) {
+    return createFallbackThumb(title);
+  }
   const img = document.createElement('img');
   img.src = src;
   img.alt = `${title} cover artwork`;
@@ -60,10 +74,7 @@ function createThumbImg(src, title) {
   img.addEventListener('error', () => {
     const parent = img.parentElement;
     if (!parent) return;
-    const fallback = createEl('div', 'thumb-fallback');
-    fallback.innerHTML = ICONS.gamepad;
-    fallback.appendChild(createEl('span', '', title));
-    parent.replaceChild(fallback, img);
+    parent.replaceChild(createFallbackThumb(title), img);
   });
   return img;
 }
@@ -120,7 +131,7 @@ export function initApp(rootEl) {
       randomBtn.disabled = getGames().length === 0;
     }
     if (footerCountEl) {
-      footerCountEl.textContent = `Arcade Shelf · ${getGames().length} HTML/JS/CSS games`;
+      footerCountEl.textContent = `EdgarTapia Class · ${getGames().length} HTML/JS/CSS games`;
     }
   }
 
@@ -164,16 +175,33 @@ export function initApp(rootEl) {
     if (filtered.length === 0) {
       gridEl.className = '';
       const empty = createEl('div', 'status-panel');
-      empty.appendChild(createEl('p', '', 'No games match your current filter.'));
-      const resetBtn = createEl('button', 'btn-secondary', 'Reset Filters');
-      resetBtn.type = 'button';
-      resetBtn.style.marginTop = '16px';
-      resetBtn.addEventListener('click', () => {
-        state.selectedCategory = 'All';
-        state.searchQuery = '';
-        renderMain();
-      });
-      empty.appendChild(resetBtn);
+      if (getGames().length === 0) {
+        empty.appendChild(createEl('h1', '', 'No games in catalog'));
+        empty.appendChild(
+          createEl(
+            'p',
+            '',
+            'Add game objects with an iframe field to games.json to display them here.'
+          )
+        );
+        const inspectBtn = createEl('button', 'btn-secondary');
+        inspectBtn.type = 'button';
+        inspectBtn.style.marginTop = '16px';
+        inspectBtn.innerHTML = `${ICONS.code}<span>View games.json</span>`;
+        inspectBtn.addEventListener('click', openJsonModal);
+        empty.appendChild(inspectBtn);
+      } else {
+        empty.appendChild(createEl('p', '', 'No games match your current filter.'));
+        const resetBtn = createEl('button', 'btn-secondary', 'Reset Filters');
+        resetBtn.type = 'button';
+        resetBtn.style.marginTop = '16px';
+        resetBtn.addEventListener('click', () => {
+          state.selectedCategory = 'All';
+          state.searchQuery = '';
+          renderMain();
+        });
+        empty.appendChild(resetBtn);
+      }
       gridEl.appendChild(empty);
       return;
     }
@@ -232,7 +260,7 @@ export function initApp(rootEl) {
       const title = createEl('h1', 'hero-title', 'Classic browser games, ready to play');
       const desc = createEl('p', 'hero-desc');
       desc.innerHTML =
-        'Six handcrafted arcade and puzzle games built with pure HTML, CSS, and JavaScript. Every title loads directly from its iframe entry in <code class="inline-code">games.json</code>.';
+        'Curated browser games built with HTML, CSS, and JavaScript. Every title loads directly from its iframe entry in <code class="inline-code">games.json</code>.';
 
       copyTop.appendChild(meta);
       copyTop.appendChild(title);
@@ -400,11 +428,14 @@ export function initApp(rootEl) {
     function mountIframe() {
       frameWrap.innerHTML = '';
       const iframe = document.createElement('iframe');
-      iframe.className = 'game-iframe';
+      iframe.className = parsed.extraClass ? `game-iframe ${parsed.extraClass}` : 'game-iframe';
+      if (parsed.id) iframe.id = parsed.id;
       iframe.src = parsed.src;
+      if (parsed.dataSrc) iframe.setAttribute('data-src', parsed.dataSrc);
       iframe.title = parsed.title;
       if (parsed.allow) iframe.setAttribute('allow', parsed.allow);
       if (parsed.sandbox) iframe.setAttribute('sandbox', parsed.sandbox);
+      if (parsed.allowFullscreen) iframe.allowFullscreen = true;
       iframe.addEventListener('load', () => {
         try {
           iframe.focus();
@@ -500,8 +531,23 @@ export function initApp(rootEl) {
     const header = createEl('header', 'site-header');
     const headerInner = createEl('div', 'header-inner');
 
-    const brandBtn = createEl('button', 'brand-btn', 'Arcade Shelf');
+    const brandBtn = createEl('button', 'brand-btn');
     brandBtn.type = 'button';
+    const brandIcon = document.createElement('img');
+    brandIcon.className = 'brand-icon';
+    brandIcon.src = './assets/aistudio/images_622b2ad0.jpg';
+    brandIcon.alt = '';
+    brandIcon.referrerPolicy = 'no-referrer';
+    brandIcon.addEventListener('error', () => {
+      if (!brandIcon.dataset.fallbackTried) {
+        brandIcon.dataset.fallbackTried = '1';
+        brandIcon.src = './public/assets/aistudio/images_622b2ad0.jpg';
+      } else {
+        brandIcon.style.display = 'none';
+      }
+    });
+    brandBtn.appendChild(brandIcon);
+    brandBtn.appendChild(createEl('span', '', 'EdgarTapia Class'));
     brandBtn.addEventListener('click', () => {
       state.activeGameId = null;
       state.selectedCategory = 'All';
@@ -540,7 +586,7 @@ export function initApp(rootEl) {
     // Footer
     const footer = createEl('footer', 'site-footer');
     const footerInner = createEl('div', 'footer-inner');
-    footerCountEl = createEl('span', '', 'Arcade Shelf · 0 HTML/JS/CSS games');
+    footerCountEl = createEl('span', '', 'EdgarTapia Class · 0 HTML/JS/CSS games');
     const footerBtn = createEl('button', 'footer-link', 'games.json catalog');
     footerBtn.type = 'button';
     footerBtn.addEventListener('click', openJsonModal);

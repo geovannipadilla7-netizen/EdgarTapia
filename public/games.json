@@ -1,65 +1,25 @@
 {
-  "catalogTitle": "Arcade Shelf Game Catalog",
+  "catalogTitle": "EdgarTapia Class Game Catalog",
   "games": [
     {
-      "id": "serpent-grid",
-      "title": "Serpent Grid",
+      "id": "geometry-dash-lite",
+      "title": "Geometry Dash Lite",
       "category": "Arcade",
       "players": "1 Player",
-      "controls": "Arrow Keys / WASD",
-      "description": "Guide the segmented serpent across a 20x20 arena, collect energy fruit and bonus orbs, and grow as long as possible without hitting walls or your own tail.",
-      "thumbnail": "./thumbnails/serpent-grid.svg",
-      "iframe": "<iframe src=\"./games/serpent-grid/index.html\" title=\"Serpent Grid\" loading=\"lazy\" allow=\"fullscreen\" sandbox=\"allow-scripts allow-same-origin\"></iframe>"
+      "controls": "Space / Click / Up Arrow",
+      "description": "Jump and fly your way through danger in this rhythm-based action platformer.",
+      "thumbnail": "",
+      "iframe": "<iframe id=\"kiwiGame\" sandbox=\"allow-scripts allow-same-origin allow-pointer-lock allow-forms\" allow=\"fullscreen; autoplay; clipboard-read; clipboard-write; gamepad\" allowfullscreen=\"\" data-src=\"/storage/Geometry Dash Lite.html\" src=\"/storage/Geometry Dash Lite.html\" class=\"loaded\"></iframe>"
     },
     {
-      "id": "brick-breaker",
-      "title": "Brick Breaker",
-      "category": "Arcade",
-      "players": "1 Player",
-      "controls": "Mouse / Arrow Keys",
-      "description": "Deflect the kinetic orb off your paddle to shatter layered brick formations, catch falling paddle modifiers, and clear all three stages.",
-      "thumbnail": "./thumbnails/brick-breaker.svg",
-      "iframe": "<iframe src=\"./games/brick-breaker/index.html\" title=\"Brick Breaker\" loading=\"lazy\" allow=\"fullscreen\" sandbox=\"allow-scripts allow-same-origin\"></iframe>"
-    },
-    {
-      "id": "tile-2048",
-      "title": "Tile 2048",
-      "category": "Puzzle",
-      "players": "1 Player",
-      "controls": "Arrow Keys / Swipe",
-      "description": "Slide numbered ceramic tiles across a 4x4 tray to merge matching values, build momentum, and reach the 2048 tile with one-step undo support.",
-      "thumbnail": "./thumbnails/tile-2048.svg",
-      "iframe": "<iframe src=\"./games/tile-2048/index.html\" title=\"Tile 2048\" loading=\"lazy\" allow=\"fullscreen\" sandbox=\"allow-scripts allow-same-origin\"></iframe>"
-    },
-    {
-      "id": "minefield",
-      "title": "Minefield",
-      "category": "Puzzle",
-      "players": "1 Player",
-      "controls": "Left Click / Right Click Flag",
-      "description": "Uncover safe cells using numerical adjacency clues, plant warning flags on suspected mines, and clear the board across three grid sizes.",
-      "thumbnail": "./thumbnails/minefield.svg",
-      "iframe": "<iframe src=\"./games/minefield/index.html\" title=\"Minefield\" loading=\"lazy\" allow=\"fullscreen\" sandbox=\"allow-scripts allow-same-origin\"></iframe>"
-    },
-    {
-      "id": "block-drop",
-      "title": "Block Drop",
+      "id": "minecraft-beta",
+      "title": "Minecraft Beta",
       "category": "Classics",
       "players": "1 Player",
-      "controls": "Arrow Keys / Space / C",
-      "description": "Rotate and stack falling polyominoes with ghost drop preview, piece holding, hard drops, and escalating speed as lines clear.",
-      "thumbnail": "./thumbnails/block-drop.svg",
-      "iframe": "<iframe src=\"./games/block-drop/index.html\" title=\"Block Drop\" loading=\"lazy\" allow=\"fullscreen\" sandbox=\"allow-scripts allow-same-origin\"></iframe>"
-    },
-    {
-      "id": "memory-pairs",
-      "title": "Memory Pairs",
-      "category": "Classics",
-      "players": "1 Player",
-      "controls": "Mouse / Touch",
-      "description": "Flip face-down linen emblem cards two at a time, chain consecutive matches for streak points, and clear 4x4 or 6x4 boards in minimal moves.",
-      "thumbnail": "./thumbnails/memory-pairs.svg",
-      "iframe": "<iframe src=\"./games/memory-pairs/index.html\" title=\"Memory Pairs\" loading=\"lazy\" allow=\"fullscreen\" sandbox=\"allow-scripts allow-same-origin\"></iframe>"
+      "controls": "Keyboard / Mouse",
+      "description": "Classic sandbox edition loaded directly from the embedded game frame.",
+      "thumbnail": "/resource-files/custom-thumbs/minecraft-beta/1792903408857",
+      "iframe": "<iframe id=\"gameFrame\" allowfullscreen=\"\" src=\"https://script.google.com/macros/s/AKfycbwdcpltFBX6oj840GrPoyx8kvbMMu4F22VmUA-949KfgdeyvN6i6C4iDuB3a_OrwRDV/exec\"></iframe>"
     }
   ]
 }

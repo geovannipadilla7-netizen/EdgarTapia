@@ -74,6 +74,9 @@ input:focus-visible {
 }
 
 .brand-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
   font-family: var(--font-display);
   font-size: 20px;
   font-weight: 700;
@@ -81,6 +84,15 @@ input:focus-visible {
   color: var(--text-primary);
   white-space: nowrap;
   flex-shrink: 0;
+}
+
+.brand-icon {
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  object-fit: cover;
+  flex-shrink: 0;
+  display: block;
 }
 
 .header-nav {
