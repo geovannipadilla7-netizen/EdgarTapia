@@ -1,0 +1,6 @@
+{
+  "name": "Arcade Shelf",
+  "description": "A curated browser arcade of classic games built with HTML, CSS, and JavaScript, loaded via iframes from a JSON catalog.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

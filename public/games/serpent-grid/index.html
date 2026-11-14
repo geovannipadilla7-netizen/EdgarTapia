@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Serpent Grid</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="game-shell">
+      <header class="hud">
+        <div class="hud-stats">
+          <div class="stat">
+            <span class="stat-label">Score</span>
+            <span id="score" class="stat-value">0</span>
+          </div>
+          <div class="stat">
+            <span class="stat-label">Best</span>
+            <span id="best" class="stat-value">0</span>
+          </div>
+          <div class="stat">
+            <span class="stat-label">Speed</span>
+            <span id="speed" class="stat-value">1x</span>
+          </div>
+        </div>
+        <div class="hud-actions">
+          <button id="pauseBtn" class="btn-secondary" type="button">Pause</button>
+          <button id="soundBtn" class="btn-secondary" type="button">Sound: On</button>
+        </div>
+      </header>
+
+      <main class="stage">
+        <canvas id="board" width="480" height="480" aria-label="Serpent Grid Arena"></canvas>
+
+        <div id="overlay" class="overlay">
+          <div class="overlay-card">
+            <h1 id="overlayTitle">Serpent Grid</h1>
+            <p id="overlayDesc">
+              Collect amber fruit to grow and raise your score. Golden orbs grant +30 bonus points before they fade.
+            </p>
+            <p class="controls-note">Move with Arrow Keys or WASD · Space to Pause</p>
+            <button id="startBtn" class="btn-primary" type="button">Start Game</button>
+          </div>
+        </div>
+      </main>
+
+      <div class="dpad" aria-label="Directional controls">
+        <button class="dpad-btn up" data-dir="UP" type="button" aria-label="Move Up">▲</button>
+        <button class="dpad-btn left" data-dir="LEFT" type="button" aria-label="Move Left">◀</button>
+        <button class="dpad-btn down" data-dir="DOWN" type="button" aria-label="Move Down">▼</button>
+        <button class="dpad-btn right" data-dir="RIGHT" type="button" aria-label="Move Right">▶</button>
+      </div>
+    </div>
+
+    <script src="game.js"></script>
+  </body>
+</html>
